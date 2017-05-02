@@ -1,0 +1,56 @@
+@startuml
+
+interface Item {
+    color: Color
+    pos: Vector
+    intersect(line: Line): Pos
+    angle(surfacePoint: Vector, facing: Vector)
+}
+
+interface NormalizedItem {
+    normal: Vector
+}
+
+class Sphere{
+    radius: number
+    color: Color
+    pos: Vector
+    constructor(radius: number, color: Color, pos: Vector)
+    intersect(line: Line): Pos
+    angle(surfacePoint: Vector, facing: Vector)
+}
+
+class Vector{
+    x: Number
+    y: Number
+    z: Number
+    constructor( x: Number, y: Number, z: Number)
+    distance(): Number
+}
+
+class Camera{
+    viewport: ?
+    position: Vector
+    direction: Vector
+    voidColor: Color
+    constructor(viewport:?, pos: Vector, direction: Vector, voidColor: Color)
+}
+
+class PointLight {
+    color: Color
+    pos: Vector
+    constructor(color: Color, pos: Vector)
+}
+
+Item <|-- Sphere
+
+Sphere ..> Vector
+Sphere ..> Color
+
+Camera ..> Vector
+Camera ..> Color
+
+PointLight ..> Vector
+PointLight ..> Color
+
+@enduml
