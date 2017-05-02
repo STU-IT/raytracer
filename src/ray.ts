@@ -12,8 +12,11 @@ class Sphere
     }
     intersect(camara: Camara, dir: Vector)
     {
+        //p^2 = radius (x^2 + y^2 + z^2 = radius)
+        //hvis kamara er pos 0, 0, 0 så skal man pluse kuglen pos med kamara pos
         var A = dir.x * dir.x + dir.y * dir.y + dir.z * dir.z;
         var B = 2 * (camara.pos.x * dir.x + camara.pos.y * dir.y + camara.pos.z * dir.z);
+        //var B = 2 *(camara.pos.x * dir.x * this.pos.x)
         var C = (camara.pos.x * camara.pos.x + camara.pos.y * camara.pos.y + camara.pos.z * camara.pos.z) - 1;
 
         var D = (B * B) - 4 * A * C;
