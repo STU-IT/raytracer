@@ -12,9 +12,30 @@ class Sphere
     }
     intersect(camara: Camara, dir: Vector)
     {
+        var A = dir.x * dir.x + dir.y * dir.y + dir.z * dir.z;
+        var B = 2 * (camara.pos.x * dir.x + camara.pos.y * dir.y + camara.pos.z * dir.z);
+        var C = (camara.pos.x * camara.pos.x + camara.pos.y * camara.pos.y + camara.pos.z * camara.pos.z) - 1;
 
+        var D = (B * B) - 4 * A * C;
+
+        if(D > 0)
+        {
+            var t;
+            var t1 = (-B + Math.sqrt(D)) / (2 * A);
+            var t2 = (-B - Math.sqrt(D)) / (2 * A);
+            if (t1 < t2)
+            {
+                t = t1;
+            }
+            else
+            {
+                t = t2;
+            }
+            return(new Vector(camara.pos.x + dir.x * t ,camara.pos.y + dir.y * t , camara.pos.z + dir.z *t));
+        }
+        else{return(null)}
     }
-    angle()
+    colorat()
     {
 
     }
