@@ -4,25 +4,26 @@ var Sphere = (function () {
         this.color = color;
         this.pos = pos;
     }
-    Sphere.prototype.intersect = function (camara, dir) {
-        //p^2 = radius (x^2 + y^2 + z^2 = radius)
-        //hvis kamara er pos 0, 0, 0 så skal man pluse kuglen pos med kamara pos
-        var A = dir.x * dir.x + dir.y * dir.y + dir.z * dir.z;
-        var B = 2 * (camara.pos.x * dir.x + camara.pos.y * dir.y + camara.pos.z * dir.z);
-        //var B = 2 *(camara.pos.x * dir.x * this.pos.x)
-        var C = (camara.pos.x * camara.pos.x + camara.pos.y * camara.pos.y + camara.pos.z * camara.pos.z) - 1;
-        var D = (B * B) - 4 * A * C;
+    Sphere.prototype.intersect = function (camara, ray) {
+        var A = camara.direction.x * camara.direction.x + camara.direction.y * camara.direction.y + camara.direction.z * camara.direction.z;
+        var B = (camara.direction.x * (camara.pos.x - this.pos.x))
+            + (camara.direction.y * (camara.pos.y - this.pos.y))
+            + (camara.direction.z * (camara.pos.z - this.pos.z));
+        var C = ((camara.pos.x - this.pos.x) * (camara.pos.x - this.pos.x)
+            + (camara.pos.y - this.pos.y) * (camara.pos.y - this.pos.y)
+            + (camara.pos.z - this.pos.z) * (camara.pos.z - this.pos.z)) - (this.radius * this.radius);
+        var D = (B * B) - (A * C);
         if (D > 0) {
             var t;
-            var t1 = (-B + Math.sqrt(D)) / (2 * A);
-            var t2 = (-B - Math.sqrt(D)) / (2 * A);
+            var t1 = (-B + Math.sqrt(D)) / A;
+            var t2 = (-B - Math.sqrt(D)) / A;
             if (t1 < t2) {
                 t = t1;
             }
             else {
                 t = t2;
             }
-            return (new Vector(camara.pos.x + dir.x * t, camara.pos.y + dir.y * t, camara.pos.z + dir.z * t));
+            return (new Vector(camara.pos.x + camara.direction.x * t, camara.pos.y + camara.direction.y * t, camara.pos.z + camara.direction.z * t));
         }
         else {
             return (null);
@@ -70,6 +71,11 @@ var Light = (function () {
         this.color = color;
     }
     return Light;
+}());
+var Scene = (function () {
+    function Scene() {
+    }
+    return Scene;
 }());
 //var kugle = new Sphere(14, {255,255,255}, {x: 30, y: 77}); 
 //# sourceMappingURL=ray.js.map

@@ -1,4 +1,4 @@
-﻿class Sphere
+﻿/*class Sphere
 {
     //hvis man trækker kuglens Pos fra camara Pos så er kuglen i nulpunktet
     radius: number;
@@ -13,13 +13,23 @@
     }
     intersect(camara: Camara, dir: Vector)
     {
-        var A = dir.x * dir.x + dir.y * dir.y + dir.z * dir.z;
-        //var B = 2 * (camara.pos.x * dir.x + camara.pos.y * dir.y + camara.pos.z * dir.z);
-        var B = 2 * ((camara.pos.x - this.pos.x) * dir.x + (camara.pos.y - this.pos.y) * dir.y + (camara.pos.z - this.pos.z) * dir.z)
-        //var C = (camara.pos.x * camara.pos.x + camara.pos.y * camara.pos.y + camara.pos.z * camara.pos.z) - 1;
-        var C = ((camara.pos.x - this.pos.x) * (camara.pos.x - this.pos.x) + (camara.pos.y - this.pos.y) * (camara.pos.y - this.pos.y) + (camara.pos.z - this.pos.z) * (camara.pos.z - this.pos.z)) - 1;
+        // o = camara pos
+        // c = kugle Pos
+        // d = afsand
+        // t = skaler
 
-        var D = (B * B) - 4 * A * C;
+        // A = d * d
+        // B = -d * (o - c)
+        // C = ((o - c) * (o * c) - R^2)
+        //var B = 2 * (camara.pos.x * dir.x + camara.pos.y * dir.y + camara.pos.z * dir.z);
+        //var B = 2 * ((camara.pos.x - this.pos.x) * dir.x + (camara.pos.y - this.pos.y) * dir.y + (camara.pos.z - this.pos.z) * dir.z);
+        //var C = (camara.pos.x * camara.pos.x + camara.pos.y * camara.pos.y + camara.pos.z * camara.pos.z) - 1;
+        //var C = ((camara.pos.x - this.pos.x) * (camara.pos.x - this.pos.x) + (camara.pos.y - this.pos.y) * (camara.pos.y - this.pos.y) + (camara.pos.z - this.pos.z) * (camara.pos.z - this.pos.z)) - 1;
+        var A = dir.x * dir.x + dir.y * dir.y + dir.z * dir.z;
+        var B = (-dir.x * (camara.pos.x - this.pos.x)) + (-dir.y * (camara.pos.y - this.pos.y)) + (-dir.z * (camara.pos.z - this.pos.z));
+        var C = ((camara.pos.x - this.pos.x) * (camara.pos.x - this.pos.x) + (camara.pos.y - this.pos.y) * (camara.pos.y - this.pos.y) + (camara.pos.z - this.pos.z) * (camara.pos.z - this.pos.z)) - (this.radius * this.radius);
+
+        var D = (B * B) - (4 * A * C);
 
         if (D > 0)
         {
@@ -43,7 +53,6 @@
     {
 
     }
-
 }
 
 class Vector
@@ -88,10 +97,11 @@ class Camara
     pos: Vector;
     voidColor: Color;
     direction: Vector;
+    viewPort;
 
-    constructor(viewPort: Vector, pos: Vector, voidColor: Color, direction: Vector)
+    constructor(viewPort, pos: Vector, voidColor: Color, direction: Vector)
     {
-        //this.veiwPort = viewPort;
+        this.viewPort = viewPort;
         this.pos = pos;
         this.voidColor = voidColor;
         this.direction = direction;
@@ -109,5 +119,5 @@ class Light
         this.color = color;
     }
 }
-
+**/
 //var kugle = new Sphere(14, {255,255,255}, {x: 30, y: 77});
