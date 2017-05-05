@@ -40,10 +40,24 @@ var Vector = (function () {
         this.z = z;
     }
     Vector.prototype.distance = function (Vector) {
-        dX = this.x - Vector.x;
-        dY = this.y - Vector.y;
-        dZ = this.z - Vector.z;
+        var dX = this.x - Vector.x;
+        var dY = this.y - Vector.y;
+        var dZ = this.z - Vector.z;
         return (Math.sqrt((dX * dX) + (dY * dY) + (dZ * dZ)));
+    };
+    Vector.prototype.pount = function (vector) {
+        return (new Vector(this.x * vector.x, this.y * vector.y, this.z * vector.z));
+    };
+    Vector.prototype.plus = function (vektor) {
+        var newVector = new Vector(this.x + vektor.x, this.y + vektor.y, this.z + vektor.z);
+        return (newVector);
+    };
+    Vector.prototype.minus = function (vector) {
+        var newVector = new Vector(this.x - vector.x, this.y - vector.y, this.z - vector.z);
+        return (newVector);
+    };
+    Vector.prototype.sum = function () {
+        return (this.x + this.y + this.z);
     };
     return Vector;
 }());
@@ -78,4 +92,4 @@ var Scene = (function () {
     return Scene;
 }());
 //var kugle = new Sphere(14, {255,255,255}, {x: 30, y: 77}); 
-//# sourceMappingURL=ray.js.map
+//# sourceMappingURL=app.js.map
