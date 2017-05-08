@@ -1,0 +1,31 @@
+{
+  "name": "raytracer",
+  "version": "1.0.0",
+  "description": "A simple raytracer",
+  "main": "src/ray.ts",
+  "directories": {
+    "doc": "docs"
+  },
+  "dependencies": {
+    "jasmine-ts": "^0.1.2",
+    "jasmine-core": "^2.6.1",
+    "jasmine": "^2.6.0"
+  },
+  "devDependencies": {
+    "@types/jasmine": "^2.5.47",
+    "@types/node": "^7.0.18"
+  },
+  "scripts": {
+    "test": "jasmine test/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/STU-IT/raytracer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/STU-IT/raytracer/issues"
+  },
+  "homepage": "https://github.com/STU-IT/raytracer#readme"
+}
