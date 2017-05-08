@@ -53,7 +53,7 @@ class Sphere extends Thing
         else { return (null) }
     }
     colorAt(camara: Camara, light: Light)
-    {//{x: 0.5547001962252291, y: -0.8320502943378437, z: 0}
+    {
         var p = this.intersect(camara, new Vector(0, 0, 0));
         var pDir = this.pos.minus(p);
         var pSkalar = this.pos.distance(p);
@@ -65,7 +65,7 @@ class Sphere extends Thing
         var colorStrength = pNormal.dot(lightNormal);
         return(new Color(( this.color.red * (light.color.red * colorStrength)) / 255,
               (this.color.green * (light.color.green * colorStrength)) / 255,
-              (this.color.blue * (light.color.blue * colorStrength)) / 255)
+              (this.color.blue * (light.color.blue * colorStrength)) / 255))
     }
 
 }
