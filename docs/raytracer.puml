@@ -1,13 +1,13 @@
 @startuml
 
-interface Item {
+interface Thing {
     color: Color
     pos: Vector
     intersect(line: Line): Pos
     angle(surfacePoint: Vector, facing: Vector)
 }
 
-interface NormalizedItem {
+interface NormalizedThing {
     normal: Vector
 }
 
@@ -26,6 +26,12 @@ class Vector{
     z: Number
     constructor( x: Number, y: Number, z: Number)
     distance(): Number
+    add(v: Vector)
+    substract(v: Vector)
+    sum()
+    dot(v: Vector)
+    skalarDiv(number)
+    skalarMulti(number)
 }
 
 class Camera{
@@ -34,6 +40,7 @@ class Camera{
     direction: Vector
     voidColor: Color
     constructor(viewport:?, pos: Vector, direction: Vector, voidColor: Color)
+    render()
 }
 
 class PointLight {
@@ -42,7 +49,18 @@ class PointLight {
     constructor(color: Color, pos: Vector)
 }
 
-Item <|-- Sphere
+class Scene{
+    things: Vector<Thing>
+    lights: Vector<Light>
+    create_sphere()
+    create_ligth()
+    save()
+    load()
+}
+
+
+
+Thing <|-- Sphere
 
 Sphere ..> Vector
 Sphere ..> Color
@@ -54,3 +72,6 @@ PointLight ..> Vector
 PointLight ..> Color
 
 @enduml
+
+
+s.create_sphere("månen", 100, "grøn", new Vector(3,4,5))
