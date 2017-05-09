@@ -70,7 +70,7 @@ class Sphere extends Thing
 
 }
 
-class Vector
+export class Vector
 {
     x: number;
     y: number;
@@ -199,7 +199,7 @@ class Scene
     }
 }
 
-scene = new Scene();
+var scene = new Scene();
 
 var camDir = new Vector(1,0,0);
 var camPos = new Vector(0,0,0);
@@ -212,3 +212,4 @@ var lightColor = new Color(255, 255, 255);
 var cam = new Camara(0, camPos, new Color(0, 0, 0), camDir);
 var light = new Light(lightPos,lightColor);
 var sp = new Sphere(1,sphereColor,spherePos);
+
