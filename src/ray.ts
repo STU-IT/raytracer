@@ -92,6 +92,11 @@ export class Vector
         return (Math.sqrt((dX * dX) + (dY * dY) + (dZ * dZ)))
     }
 
+    length()
+    {
+        return this.distance(new Vector(0,0,0));
+    }
+
     dot(vector: Vector)
     {
         var newVector = new Vector(this.x * vector.x, this.y * vector.y, this.z * vector.z).sum();
@@ -110,6 +115,12 @@ export class Vector
     sum()
     {
         return (this.x + this.y + this.z)
+    }
+
+    normal()
+    {
+        var normallength = this.length()
+        return (new Vector(this.x / normallength, this.y / normallength, this.z / normallength));
     }
 }
 

@@ -62,9 +62,27 @@ describe("Vector class", function () {
     });
 
     //minus
+
+    it("should be negative", function () {
+        expect(this.v0.minus(this.v5)).toEqual(new Vector(-5, 0, 0));
+        expect(this.v5.minus(this.v6)).toEqual(new Vector(3, -3, 0));
+    })
+
+    it("should be positive", function () {
+        expect(this.v5.minus(this.v0)).toEqual(new Vector(5, 0, 0));
+
+    })
+
+
     //sum
     // skaler
     // elemMultiply
+
+    // normal
+
+    it("should have length 1", function () {
+       expect(this.v5.normal().length()).toEqual(1);
+    })
 });
 
 
