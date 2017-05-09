@@ -1,8 +1,15 @@
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+"use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
 var Thing = (function () {
     function Thing() {
     }
@@ -11,10 +18,11 @@ var Thing = (function () {
 var Sphere = (function (_super) {
     __extends(Sphere, _super);
     function Sphere(radius, color, pos) {
-        _super.call(this);
-        this.radius = radius;
-        this.color = color;
-        this.pos = pos;
+        var _this = _super.call(this) || this;
+        _this.radius = radius;
+        _this.color = color;
+        _this.pos = pos;
+        return _this;
     }
     Sphere.prototype.intersect = function (camara, ray) {
         //var A = camara.direction.x * camara.direction.x + camara.direction.y * camara.direction.y + camara.direction.z * camara.direction.z;
@@ -69,6 +77,9 @@ var Vector = (function () {
         var dZ = this.z - Vector.z;
         return (Math.sqrt((dX * dX) + (dY * dY) + (dZ * dZ)));
     };
+    Vector.prototype.length = function () {
+        return this.distance(new Vector(0, 0, 0));
+    };
     Vector.prototype.dot = function (vector) {
         var newVector = new Vector(this.x * vector.x, this.y * vector.y, this.z * vector.z).sum();
         return (newVector);
@@ -84,8 +95,13 @@ var Vector = (function () {
     Vector.prototype.sum = function () {
         return (this.x + this.y + this.z);
     };
+    Vector.prototype.normal = function () {
+        var normallength = this.length();
+        return (new Vector(this.x / normallength, this.y / normallength, this.z / normallength));
+    };
     return Vector;
 }());
+exports.Vector = Vector;
 var Color = (function () {
     function Color(red, green, blue) {
         this.red = red;
@@ -139,7 +155,7 @@ var Scene = (function () {
     };
     return Scene;
 }());
-scene = new Scene();
+var scene = new Scene();
 var camDir = new Vector(1, 0, 0);
 var camPos = new Vector(0, 0, 0);
 var lightPos = new Vector(2, 3, 0);
