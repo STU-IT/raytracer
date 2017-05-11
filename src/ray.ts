@@ -57,18 +57,19 @@ class Sphere extends Thing
         var p : Vector = this.intersect(camara, new Vector(0, 0, 0));
         var pDir : Vector = p.minus(this.pos);
         var pSkalar : number = this.pos.distance(p);
-        var pNormal : Vector = new Vector(pDir.x / pSkalar, pDir.y / pSkalar, pDir.z / pSkalar);
+        //var pNormal : Vector = new Vector(pDir.x / pSkalar, pDir.y / pSkalar, pDir.z / pSkalar);
+        var pNormal = p.normal();
 
         var lightDir : Vector = p.minus(light.pos);
-        var lightSkalar : number = lightDir.distance(p);
-        var lightNormal : Vector = new Vector(lightDir.x / lightSkalar, lightDir.y / lightSkalar, lightDir.z / lightSkalar);
+        var lightSkalar : number = light.pos.distance(p);
+        //var lightNormal : Vector = new Vector(lightDir.x / lightSkalar, lightDir.y / lightSkalar, lightDir.z / lightSkalar);
+        var lightNormal = lightDir.normal();
         var colorStrength : number = pNormal.dot(lightNormal);
         colorStrength = Math.abs(colorStrength);
         return(new Color(( this.color.red * (light.color.red * colorStrength)) / 255,
               (this.color.green * (light.color.green * colorStrength)) / 255,
               (this.color.blue * (light.color.blue * colorStrength)) / 255))
     }
-
 }
 
 class Vector
@@ -216,7 +217,7 @@ var scene = new Scene();
 var camDir = new Vector(1,0,0);
 var camPos = new Vector(0,0,0);
 var lightPos = new Vector(2,3,0);
-var spherePos = new Vector(5,0,0);
+var spherePos = new Vector(6,0,0);
 
 var sphereColor = new Color(255, 0, 100);
 var lightColor = new Color(255, 255, 255);
