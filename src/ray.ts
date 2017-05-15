@@ -210,6 +210,24 @@ class Scene
     }
 }
 
+
+function showImageInCanvas(image: Array<Array<Color>>, ctx, width: number, height: number)
+{
+    for (var x in image)
+    {
+        for (var y in image[x])
+        {
+            var color: Color = image[x][y];
+            ctx.fillStyle = "rgb("
+                                + String(color.red) + ", "
+                                + String(color.green) + ", "
+                                + String(color.blue)
+                            ")";
+            ctx.fillRect(x,y, x+1, y+1)
+        }
+    }
+}
+
 var scene = new Scene();
 
 var camDir = new Vector(1,0,0);
@@ -224,3 +242,8 @@ var cam = new Camara(0, camPos, new Color(0, 0, 0), camDir);
 var light = new Light(lightPos,lightColor);
 var sp = new Sphere(1,sphereColor,spherePos);
 
+var ctx = billede.getContext("2d");
+
+var img = scene.camara.Render();
+
+showImageInCanvas(img, ctx, billede.width, billede.height);
