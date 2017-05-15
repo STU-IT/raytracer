@@ -49,3 +49,6 @@ jspm_packages
 .yarn-integrity
 
 
+src/ray.js
+test/VectorTest.js
+*.map
