@@ -1,6 +1,9 @@
 class Thing
 {
-
+    colorAt(camera: Camera, light: Light, p: Vector)
+    {}
+    intersect(camera: Camera, ray: Vector)
+    {}
 }
 
 class Sphere extends Thing
@@ -17,20 +20,16 @@ class Sphere extends Thing
         this.color = color;
         this.pos = pos;
     }
-    intersect(camara: Camera, ray: Vector)
+    intersect(camera: Camera, ray: Vector): Vector
     {
-        //var A = camera.direction.x * camera.direction.x + camera.direction.y * camera.direction.y + camera.direction.z * camera.direction.z;
-
-        /*var B = (camera.direction.x * (camera.pos.x - this.pos.x))
-         + (camera.direction.y * (camera.pos.y - this.pos.y))
-         + (camera.direction.z * (camera.pos.z - this.pos.z));**/
-
-        /*var C = ((camera.pos.x - this.pos.x) * (camera.pos.x - this.pos.x)
-         + (camera.pos.y - this.pos.y) * (camera.pos.y - this.pos.y)
-         + (camera.pos.z - this.pos.z) * (camera.pos.z - this.pos.z)) - (this.radius * this.radius);**/
-        var A = camara.direction.dot(camara.direction);
-        var B = camara.direction.dot(camara.pos.minus(this.pos));
-        var C = camara.pos.minus(this.pos).dot(camara.pos.minus(this.pos)) - (this.radius * this.radius);
+        /*
+        var A = camera.direction.dot(camera.direction);
+        var B = camera.direction.dot(camera.pos.minus(this.pos));
+        var C = camera.pos.minus(this.pos).dot(camera.pos.minus(this.pos)) - (this.radius * this.radius);
+        **/
+        var A = ray.dot(ray);
+        var B = ray.dot(camera.pos.minus(this.pos));
+        var C = camera.pos.minus(this.pos).dot(camera.pos.minus(this.pos)) - (this.radius * this.radius);
 
         var D = (B * B) - (A * C);
 
@@ -48,13 +47,13 @@ class Sphere extends Thing
             {
                 t = t2;
             }
-            return (new Vector(camara.pos.x + camara.direction.x * t, camara.pos.y + camara.direction.y * t, camara.pos.z + camara.direction.z * t));
+            return (new Vector(camera.pos.x + ray.x * t, camera.pos.y + ray.y * t, camera.pos.z + ray.z * t));
         }
         else { return (null) }
     }
-    colorAt(camara: Camera, light: Light)
+    colorAt(camera: Camera, light: Light, p: Vector)
     {
-        var p : Vector = this.intersect(camara, new Vector(0, 0, 0));
+        //var p : Vector = this.intersect(camera);
         /*
         var pDir : Vector = p.minus(this.pos);
         var pSkalar : number = this.pos.distance(p);
@@ -162,9 +161,49 @@ class Camera
         this.voidColor = voidColor;
         this.direction = direction.normal();
     }
-    Render()
+    Render(): Array<Array<Color>>
     {
-        
+        var image = [];
+        for(var i = 0; i < this.viewport.horizRes; i++)
+        {
+            image.push([]);
+            for(var j = 0; j < this.viewport.vertRes; j++)
+            {
+                var minP;
+                var minPDis = Infinity;
+                var thingName;
+
+                var x = this.viewport.xOf(i);
+                var y = this.viewport.yOf(j);
+
+                var raySpear = new Vector(this.viewport.upperLeftCorner.x + x, this.viewport.upperLeftCorner.y + y, this.viewport.upperLeftCorner.z);
+
+                for(var t in scene.things)
+                {
+                    var temP;
+                    temP = scene.things[t].intersect(scene.camera, raySpear);
+
+                    if(temP != null)
+                    {
+                        if (temP.distance(scene.camera.pos) < minPDis)
+                        {
+                            minP = temP;
+                            minPDis = minP.distance(scene.camera.pos);
+                            thingName = t;
+                        }
+                    }
+                }
+                if(minPDis != Infinity)
+                {
+                    image[i][j] = scene.things[thingName].colorAt(scene.camera, scene.lights["mainLight"], minP);
+                }
+                else
+                {
+                    image[i][j] = scene.camera.voidColor;
+                }
+            }
+        }
+        return(image)
     }
 }
 
