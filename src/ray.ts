@@ -54,15 +54,16 @@ class Sphere extends Thing
     }
     colorAt(camara: Camara, light: Light)
     {
-        var p = this.intersect(camara, new Vector(0, 0, 0));
-        var pDir = this.pos.minus(p);
-        var pSkalar = this.pos.distance(p);
-        var pNormal = new Vector(pDir.x / pSkalar, pDir.y / pSkalar, pDir.z / pSkalar);
+        var p : Vector = this.intersect(camara, new Vector(0, 0, 0));
+        var pDir : Vector = p.minus(this.pos);
+        var pSkalar : number = this.pos.distance(p);
+        var pNormal : Vector = new Vector(pDir.x / pSkalar, pDir.y / pSkalar, pDir.z / pSkalar);
 
-        var lightDir = p.minus(light.pos);
-        var lightSkalar = lightDir.distance(p);
-        var lightNormal = new Vector(lightDir.x / lightSkalar, lightDir.y / lightSkalar, lightDir.z / lightSkalar);
-        var colorStrength = pNormal.dot(lightNormal);
+        var lightDir : Vector = p.minus(light.pos);
+        var lightSkalar : number = lightDir.distance(p);
+        var lightNormal : Vector = new Vector(lightDir.x / lightSkalar, lightDir.y / lightSkalar, lightDir.z / lightSkalar);
+        var colorStrength : number = pNormal.dot(lightNormal);
+        colorStrength = Math.abs(colorStrength);
         return(new Color(( this.color.red * (light.color.red * colorStrength)) / 255,
               (this.color.green * (light.color.green * colorStrength)) / 255,
               (this.color.blue * (light.color.blue * colorStrength)) / 255))
@@ -94,9 +95,9 @@ export class Vector
 
     length()
     {
-        return this.distance(new Vector(0,0,0));
+        var zero = new Vector(0, 0, 0);
+        return(zero.distance(this))
     }
-
     dot(vector: Vector)
     {
         var newVector = new Vector(this.x * vector.x, this.y * vector.y, this.z * vector.z).sum();
@@ -119,8 +120,8 @@ export class Vector
 
     normal()
     {
-        var normallength = this.length()
-        return (new Vector(this.x / normallength, this.y / normallength, this.z / normallength));
+        var normalLength = this.length();
+        return(new Vector(this.x / normalLength, this.y / normalLength, this.z / normalLength))
     }
 }
 
@@ -184,6 +185,8 @@ class Scene
     constructor()
     {
         //{}
+        this.things = [];
+        this.lights = [];
     }
     create_sphere(name: string, radius: number, color: Color, pos: Vector)
     {
@@ -199,7 +202,7 @@ class Scene
     }
     save()
     {
-        var data = "{name: 'Bob', occupation: 'Plumber'}";
+        var data = scene.toString();
         var url = 'data:text/json;charset=utf8,' + encodeURIComponent(data);
         window.open(url, '_blank');
         window.focus();
@@ -238,9 +241,21 @@ var spherePos = new Vector(5,0,0);
 var sphereColor = new Color(255, 0, 100);
 var lightColor = new Color(255, 255, 255);
 
+scene.create_camara(0, camPos, new Color(0, 0, 0), camDir);
+scene.create_light("mainLight", lightPos, lightColor);
+scene.create_sphere("testSphere", 1, sphereColor, spherePos);
+
+scene.camara.Render();
+
+console.log(
+scene.things['testSphere'].colorAt(scene.camara, scene.lights['mainLight'])
+);
+
+/*
 var cam = new Camara(0, camPos, new Color(0, 0, 0), camDir);
 var light = new Light(lightPos,lightColor);
 var sp = new Sphere(1,sphereColor,spherePos);
+*/
 
 var ctx = billede.getContext("2d");
 
