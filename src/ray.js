@@ -17,13 +17,13 @@ var Sphere = (function (_super) {
         this.pos = pos;
     }
     Sphere.prototype.intersect = function (camara, ray) {
-        //var A = camara.direction.x * camara.direction.x + camara.direction.y * camara.direction.y + camara.direction.z * camara.direction.z;
-        /*var B = (camara.direction.x * (camara.pos.x - this.pos.x))
-         + (camara.direction.y * (camara.pos.y - this.pos.y))
-         + (camara.direction.z * (camara.pos.z - this.pos.z));**/
-        /*var C = ((camara.pos.x - this.pos.x) * (camara.pos.x - this.pos.x)
-         + (camara.pos.y - this.pos.y) * (camara.pos.y - this.pos.y)
-         + (camara.pos.z - this.pos.z) * (camara.pos.z - this.pos.z)) - (this.radius * this.radius);**/
+        //var A = camera.direction.x * camera.direction.x + camera.direction.y * camera.direction.y + camera.direction.z * camera.direction.z;
+        /*var B = (camera.direction.x * (camera.pos.x - this.pos.x))
+         + (camera.direction.y * (camera.pos.y - this.pos.y))
+         + (camera.direction.z * (camera.pos.z - this.pos.z));**/
+        /*var C = ((camera.pos.x - this.pos.x) * (camera.pos.x - this.pos.x)
+         + (camera.pos.y - this.pos.y) * (camera.pos.y - this.pos.y)
+         + (camera.pos.z - this.pos.z) * (camera.pos.z - this.pos.z)) - (this.radius * this.radius);**/
         var A = camara.direction.dot(camara.direction);
         var B = camara.direction.dot(camara.pos.minus(this.pos));
         var C = camara.pos.minus(this.pos).dot(camara.pos.minus(this.pos)) - (this.radius * this.radius);
@@ -46,15 +46,20 @@ var Sphere = (function (_super) {
     };
     Sphere.prototype.colorAt = function (camara, light) {
         var p = this.intersect(camara, new Vector(0, 0, 0));
-        var pDir = p.minus(this.pos);
-        var pSkalar = this.pos.distance(p);
+        /*
+        var pDir : Vector = p.minus(this.pos);
+        var pSkalar : number = this.pos.distance(p);
         //var pNormal : Vector = new Vector(pDir.x / pSkalar, pDir.y / pSkalar, pDir.z / pSkalar);
         var pNormal = p.normal();
-        var lightDir = p.minus(light.pos);
-        var lightSkalar = light.pos.distance(p);
-        //var lightNormal : Vector = new Vector(lightDir.x / lightSkalar, lightDir.y / lightSkalar, lightDir.z / lightSkalar);
+
+
+        var lightSkalar : number = light.pos.distance(p);
+        var lightNormal : Vector = new Vector(lightDir.x / lightSkalar, lightDir.y / lightSkalar, lightDir.z / lightSkalar);
         var lightNormal = lightDir.normal();
-        var colorStrength = pNormal.dot(lightNormal);
+        var colorStrength : number = pNormal.dot(lightNormal);
+        **/
+        var lightDir = p.minus(light.pos);
+        var colorStrength = p.normal().dot(lightDir.normal());
         colorStrength = Math.abs(colorStrength);
         return (new Color((this.color.red * (light.color.red * colorStrength)) / 255, (this.color.green * (light.color.green * colorStrength)) / 255, (this.color.blue * (light.color.blue * colorStrength)) / 255));
     };
@@ -109,21 +114,43 @@ var Color = (function () {
     return Color;
 }());
 ;
-var Camara = (function () {
-    function Camara(viewport, pos, voidColor, direction) {
+var Camera = (function () {
+    function Camera(viewport, pos, voidColor, direction) {
         this.viewport = viewport;
         this.pos = pos;
         this.voidColor = voidColor;
-        this.direction = direction.normal(pos);
+        this.direction = direction.normal();
     }
-    Camara.prototype.Render = function () {
+    Camera.prototype.Render = function () {
     };
-    return Camara;
+    return Camera;
 }());
 var Viewport = (function () {
-    function Viewport(horizRes, vertRes) {
-        this.horizAngl = 39.6;
+    function Viewport(horizRes, vertRes, center, horizAngl) {
+        //this.horizAngl = 39.6;
+        this.horizAngl = horizAngl;
+        this.horizRes = horizRes;
+        this.vertRes = vertRes;
+        /*var leftX = -Math.tan(horizAngl / 2);
+        var dX = horizRes / (leftX * 2);
+        var leftY = dX * (vertRes / 2);
+
+        var B = 1;**/
+        var leftX = Math.tan((horizAngl / 2) * (Math.PI / 180));
+        this.dX = 2 * leftX / (horizRes);
+        var leftY = this.dX * (vertRes / 2);
+        this.upperLeftCorner = new Vector(-leftX, leftY, center.z);
+        this.lowerRightCorner = new Vector(leftX, -leftY, center.z);
+        console.debug("lextX = " + leftX);
+        console.debug("lextY = " + leftY);
+        console.debug("dX = " + this.dX);
     }
+    Viewport.prototype.xOf = function (i) {
+        return (this.dX / 2 + this.dX * i);
+    };
+    Viewport.prototype.yOf = function (j) {
+        return (this.dX / 2 + this.dX * j);
+    };
     return Viewport;
 }());
 var Light = (function () {
@@ -145,8 +172,8 @@ var Scene = (function () {
     Scene.prototype.create_light = function (name, pos, color) {
         this.lights[name] = new Light(pos, color);
     };
-    Scene.prototype.create_camara = function (viewPort, pos, voidColor, direction) {
-        this.camara = new Camara(viewPort, pos, voidColor, direction);
+    Scene.prototype.create_camera = function (viewPort, pos, voidColor, direction) {
+        this.camera = new Camera(viewPort, pos, voidColor, direction);
     };
     Scene.prototype.save = function () {
         var data = scene.toString();
@@ -159,19 +186,20 @@ var Scene = (function () {
     return Scene;
 }());
 var scene = new Scene();
-var camaraDir = new Vector(1, 0, 0);
+var camaraDir = new Vector(0, 0, 1);
 var camaraPos = new Vector(0, 0, 0);
-var lightPos = new Vector(2, 3, 0);
-var spherePos = new Vector(5, 0, 0);
+var lightPos = new Vector(-1, 0, 3);
+var spherePos = new Vector(0.5, 0, 4);
 var sphereColor = new Color(255, 0, 100);
 var lightColor = new Color(255, 255, 255);
-scene.create_camara(0, camaraPos, new Color(0, 0, 0), camaraDir);
+scene.create_camera(0, camaraPos, new Color(0, 0, 0), camaraDir);
 scene.create_light("mainLight", lightPos, lightColor);
 scene.create_sphere("testSphere", 1, sphereColor, spherePos);
-scene.camara.Render();
-console.log(scene.things['testSphere'].colorAt(scene.camara, scene.lights['mainLight']));
+var v = new Viewport(100, 100, scene.camera.direction, 40);
+scene.camera.Render();
+console.log(scene.things['testSphere'].colorAt(scene.camera, scene.lights['mainLight']));
 /*
- var cam = new Camara(0, camPos, new Color(0, 0, 0), camDir);
+ var cam = new Camera(0, camPos, new Color(0, 0, 0), camDir);
  var light = new Light(lightPos,lightColor);
  var sp = new Sphere(1,sphereColor,spherePos);
  */ 
