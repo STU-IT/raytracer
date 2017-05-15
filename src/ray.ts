@@ -22,6 +22,7 @@ class Sphere extends Thing
     }
     intersect(camera: Camera, ray: Vector): Vector
     {
+<<<<<<< HEAD
         /*
         var A = camera.direction.dot(camera.direction);
         var B = camera.direction.dot(camera.pos.minus(this.pos));
@@ -30,6 +31,20 @@ class Sphere extends Thing
         var A = ray.dot(ray);
         var B = ray.dot(camera.pos.minus(this.pos));
         var C = camera.pos.minus(this.pos).dot(camera.pos.minus(this.pos)) - (this.radius * this.radius);
+=======
+        //var A = camara.direction.x * camara.direction.x + camara.direction.y * camara.direction.y + camara.direction.z * camara.direction.z;
+
+        /*var B = (camara.direction.x * (camara.pos.x - this.pos.x))
+            + (camara.direction.y * (camara.pos.y - this.pos.y))
+            + (camara.direction.z * (camara.pos.z - this.pos.z));**/
+
+        /*var C = ((camara.pos.x - this.pos.x) * (camara.pos.x - this.pos.x)
+            + (camara.pos.y - this.pos.y) * (camara.pos.y - this.pos.y)
+            + (camara.pos.z - this.pos.z) * (camara.pos.z - this.pos.z)) - (this.radius * this.radius);**/
+        var A = camara.direction.dot(camara.direction);
+        var B = camara.direction.dot(camara.pos.minus(this.pos));
+        var C = camara.pos.minus(this.pos).dot(camara.pos.minus(this.pos)) - (this.radius * this.radius);
+>>>>>>> b23e021e640ccb673e1c2b832708d1b34eb4646b
 
         var D = (B * B) - (A * C);
 
@@ -76,7 +91,7 @@ class Sphere extends Thing
 
 }
 
-class Vector
+export class Vector
 {
     x: number;
     y: number;
@@ -97,6 +112,7 @@ class Vector
 
         return (Math.sqrt((dX * dX) + (dY * dY) + (dZ * dZ)))
     }
+
     length()
     {
         var zero = new Vector(0, 0, 0);
@@ -121,6 +137,7 @@ class Vector
     {
         return (this.x + this.y + this.z)
     }
+
     normal()
     {
         var normalLength = this.length();
@@ -300,6 +317,24 @@ class Scene
     }
 }
 
+
+function showImageInCanvas(image: Array<Array<Color>>, ctx, width: number, height: number)
+{
+    for (var x in image)
+    {
+        for (var y in image[x])
+        {
+            var color: Color = image[x][y];
+            ctx.fillStyle = "rgb("
+                                + String(color.red) + ", "
+                                + String(color.green) + ", "
+                                + String(color.blue)
+                            ")";
+            ctx.fillRect(x,y, x+1, y+1)
+        }
+    }
+}
+
 var scene = new Scene();
 
 var camaraDir = new Vector(0,0,1);
@@ -320,7 +355,20 @@ scene.camera.Render();
 console.log(scene.things['testSphere'].colorAt(scene.camera, scene.lights['mainLight']));
 
 /*
+<<<<<<< HEAD
  var cam = new Camera(0, camPos, new Color(0, 0, 0), camDir);
  var light = new Light(lightPos,lightColor);
  var sp = new Sphere(1,sphereColor,spherePos);
  */
+=======
+var cam = new Camara(0, camPos, new Color(0, 0, 0), camDir);
+var light = new Light(lightPos,lightColor);
+var sp = new Sphere(1,sphereColor,spherePos);
+*/
+
+var ctx = billede.getContext("2d");
+
+var img = scene.camara.Render();
+
+showImageInCanvas(img, ctx, billede.width, billede.height);
+>>>>>>> b23e021e640ccb673e1c2b832708d1b34eb4646b
