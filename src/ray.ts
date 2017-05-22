@@ -53,6 +53,7 @@ class Sphere extends Thing
     }
     colorAt(camera: Camera, light: Light, p: Vector)
     {
+
         //var p : Vector = this.intersect(camera);
         /*
         var pDir : Vector = p.minus(this.pos);
@@ -322,16 +323,16 @@ var scene = new Scene();
 
 var camaraDir = new Vector(0,0,1);
 var camaraPos = new Vector(0,0,0);
-var lightPos = new Vector(-1,0,3);
-var spherePos = new Vector(0, 0, 2);
+var lightPos = new Vector(0,0,5);
+var spherePos = new Vector(0,0,4);
 
-var sphereColor = new Color(255, 0, 100);
+var sphereColor = new Color(255, 0, 0);
 var lightColor = new Color(255, 255, 255);
 
 var v = new Viewport(300, 600, camaraDir, 40);
-scene.create_camera(v, camaraPos, new Color(0, 100, 0), camaraDir);
+scene.create_camera(v, camaraPos, new Color(0, 0, 0), camaraDir);
 scene.create_light("mainLight", lightPos, lightColor);
-scene.create_sphere("testSphere", 0.1, sphereColor, spherePos);
+scene.create_sphere("testSphere", 1, sphereColor, spherePos);
 
 
 scene.camera.Render();
