@@ -215,22 +215,40 @@ var Scene = (function () {
     };
     return Scene;
 }());
+function showImageInCanvas(image, ctx, width, height) {
+    for (var x in image) {
+        for (var y in image[x]) {
+            var color = image[x][y];
+            var cText = "rgb("
+                + String(Math.floor(color.red)) + ", "
+                + String(Math.floor(color.green)) + ", "
+                + String(Math.floor(color.blue))
+                + ")";
+            ctx.fillStyle = cText;
+            ctx.fillRect(x, y, x + 1, y + 1);
+        }
+    }
+}
 var scene = new Scene();
 var camaraDir = new Vector(0, 0, 1);
 var camaraPos = new Vector(0, 0, 0);
 var lightPos = new Vector(-1, 0, 3);
-var spherePos = new Vector(0.5, 0, 4);
+var spherePos = new Vector(0, 0, 2);
 var sphereColor = new Color(255, 0, 100);
 var lightColor = new Color(255, 255, 255);
-scene.create_camera(0, camaraPos, new Color(0, 0, 0), camaraDir);
+var v = new Viewport(300, 600, camaraDir, 40);
+scene.create_camera(v, camaraPos, new Color(0, 100, 0), camaraDir);
 scene.create_light("mainLight", lightPos, lightColor);
-scene.create_sphere("testSphere", 1, sphereColor, spherePos);
-var v = new Viewport(100, 100, scene.camera.direction, 40);
+scene.create_sphere("testSphere", 0.1, sphereColor, spherePos);
 scene.camera.Render();
-console.log(scene.things['testSphere'].colorAt(scene.camera, scene.lights['mainLight']));
+//console.log(scene.things['testSphere'].colorAt(scene.camera, scene.lights['mainLight']));
 /*
  var cam = new Camera(0, camPos, new Color(0, 0, 0), camDir);
  var light = new Light(lightPos,lightColor);
  var sp = new Sphere(1,sphereColor,spherePos);
- */ 
+ */
+var billede = document.getElementById('billede');
+var ctx = billede.getContext("2d");
+var img = scene.camera.Render();
+showImageInCanvas(img, ctx, billede.width, billede.height);
 //# sourceMappingURL=ray.js.map
