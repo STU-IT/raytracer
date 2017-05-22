@@ -12,6 +12,7 @@ var Thing = (function () {
 }());
 var Sphere = (function (_super) {
     __extends(Sphere, _super);
+    //pos: Vector;
     function Sphere(radius, color, pos) {
         _super.call(this);
         this.radius = radius;
@@ -45,23 +46,47 @@ var Sphere = (function (_super) {
         }
     };
     Sphere.prototype.colorAt = function (camera, light, p) {
-        //var p : Vector = this.intersect(camera);
         /*
-        var pDir : Vector = p.minus(this.pos);
-        var pSkalar : number = this.pos.distance(p);
-        //var pNormal : Vector = new Vector(pDir.x / pSkalar, pDir.y / pSkalar, pDir.z / pSkalar);
-        var pNormal = p.normal();
+        for (var thing in scene.things)
+        {
 
+            var A = p.dot(p);
+            var B = p.dot(light.pos.minus(scene.things[thing].pos));
+            var C = light.pos.minus(scene.things[thing].pos).dot(light.pos.minus(scene.things[thing].pos)) - (scene.things[thing].radius * scene.things[thing].radius);
 
-        var lightSkalar : number = light.pos.distance(p);
-        var lightNormal : Vector = new Vector(lightDir.x / lightSkalar, lightDir.y / lightSkalar, lightDir.z / lightSkalar);
-        var lightNormal = lightDir.normal();
-        var colorStrength : number = pNormal.dot(lightNormal);
-        **/
+            var D = (B * B) - (A * C);
+
+            if (D > 0)
+            {
+                var t;
+                var t1 = (-B + Math.sqrt(D)) / A;
+                var t2 = (-B - Math.sqrt(D)) / A;
+
+                if (t1 < t2)
+                {
+                    t = t1;
+                }
+                else
+                {
+                    t = t2;
+                }
+            }
+            if (t < 1)
+            {
+                return(new Color(0,0,0))
+            }
+
+            if (t == 1)
+            {
+            '*/
         var lightDir = p.minus(light.pos);
         var colorStrength = p.normal().dot(lightDir.normal());
         colorStrength = Math.abs(colorStrength);
         return (new Color((this.color.red * (light.color.red * colorStrength)) / 255, (this.color.green * (light.color.green * colorStrength)) / 255, (this.color.blue * (light.color.blue * colorStrength)) / 255));
+        /*
+            }
+        }
+        **/
     };
     return Sphere;
 }(Thing));
@@ -234,10 +259,10 @@ var camaraDir = new Vector(0, 0, 1);
 var camaraPos = new Vector(0, 0, 0);
 var lightPos = new Vector(0, 0, 5);
 var spherePos = new Vector(0, 0, 4);
-var sphereColor = new Color(255, 0, 0);
-var lightColor = new Color(255, 255, 255);
+var sphereColor = new Color(255, 255, 255);
+var lightColor = new Color(255, 0, 0);
 var v = new Viewport(300, 600, camaraDir, 40);
-scene.create_camera(v, camaraPos, new Color(0, 0, 0), camaraDir);
+scene.create_camera(v, camaraPos, new Color(0, 100, 0), camaraDir);
 scene.create_light("mainLight", lightPos, lightColor);
 scene.create_sphere("testSphere", 1, sphereColor, spherePos);
 scene.camera.Render();
