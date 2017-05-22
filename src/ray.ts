@@ -176,7 +176,7 @@ class Camera
                 var x = this.viewport.xOf(i);
                 var y = this.viewport.yOf(j);
 
-                var raySpear = new Vector(this.viewport.upperLeftCorner.x + x, this.viewport.upperLeftCorner.y + y, this.viewport.upperLeftCorner.z);
+                var raySpear = new Vector(this.viewport.upperLeftCorner.x + x, this.viewport.upperLeftCorner.y - y, this.viewport.upperLeftCorner.z);
 
                 for(var t in scene.things)
                 {
