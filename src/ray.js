@@ -71,22 +71,23 @@ var Sphere = (function (_super) {
                     t = t2;
                 }
             }
-            if (t < 1)
+            if (t < 1 && t > 0)
             {
                 return(new Color(0,0,0))
             }
 
-            if (t == 1)
+           //if (t == 1)
+            else
             {
-            '*/
+            **/
         var lightDir = p.minus(light.pos);
         var colorStrength = p.normal().dot(lightDir.normal());
         colorStrength = Math.abs(colorStrength);
         return (new Color((this.color.red * (light.color.red * colorStrength)) / 255, (this.color.green * (light.color.green * colorStrength)) / 255, (this.color.blue * (light.color.blue * colorStrength)) / 255));
         /*
-            }
         }
-        **/
+    }
+    **/
     };
     return Sphere;
 }(Thing));
@@ -168,11 +169,22 @@ var Camera = (function () {
                         }
                     }
                 }
-                if (minPDis != Infinity) {
-                    image[i][j] = scene.things[thingName].colorAt(scene.camera, scene.lights["mainLight"], minP);
+                if (image[i][j] == null) {
+                    if (minPDis != Infinity) {
+                        image[i][j] = scene.things[thingName].colorAt(scene.camera, scene.lights["mainLight"], minP);
+                    }
+                    else {
+                        image[i][j] = scene.camera.voidColor;
+                    }
                 }
-                else {
-                    image[i][j] = scene.camera.voidColor;
+                if (minPDis != Infinity) {
+                    var pSDis = minP.distance(scene.lights["mainLight"].pos);
+                    for (var thing in scene.things) {
+                        var tSD = scene.things[thing].intersect(scene.lights["mainLight"], minP).distance(scene.lights["mainLight"].pos);
+                        if (pSDis > tSD + 3) {
+                            image[i][j] = new Color(0, 0, 0);
+                        }
+                    }
                 }
             }
         }
@@ -257,14 +269,14 @@ function showImageInCanvas(image, ctx, width, height) {
 var scene = new Scene();
 var camaraDir = new Vector(0, 0, 1);
 var camaraPos = new Vector(0, 0, 0);
-var lightPos = new Vector(0, 0, 5);
-var spherePos = new Vector(0, 0, 4);
+var lightPos = new Vector(-1, 1, 10);
+var spherePos = new Vector(0, 0, 40);
 var sphereColor = new Color(255, 255, 255);
-var lightColor = new Color(255, 0, 0);
+var lightColor = new Color(255, 255, 255);
 var v = new Viewport(300, 600, camaraDir, 40);
 scene.create_camera(v, camaraPos, new Color(0, 100, 0), camaraDir);
 scene.create_light("mainLight", lightPos, lightColor);
-scene.create_sphere("testSphere", 1, sphereColor, spherePos);
+scene.create_sphere("testSphere", 10, sphereColor, spherePos);
 scene.camera.Render();
 //console.log(scene.things['testSphere'].colorAt(scene.camera, scene.lights['mainLight']));
 /*
