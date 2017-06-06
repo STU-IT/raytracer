@@ -22,4 +22,4 @@ class Shape
 
 
 }
-export {Shape}
+export {Shape, HitRecord}

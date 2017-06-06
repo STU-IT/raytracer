@@ -204,19 +204,6 @@ class Vector3
     {
         return(new Vector3(this.e[0] - vector.e[0], this.e[1] - vector.e[1], this.e[2] - vector.e[2]))
     }
-    dot(vector: Vector3): number
-    {
-        return((this.x() * vector.x()) + (this.y() * vector.y()) + (this.z() * vector.z()))
-    }
-    cross(vector: Vector3): Vector3
-    {
-        var temp = new Vector3();
-
-        temp.e[0] = this.y() * vector.z() - this.z() * vector.y();
-        temp.e[1] = this.z() * vector.x() - this.x() * vector.z();
-        temp.e[2] = this.x() * vector.y() - this.y() * vector.x();
-        return (temp)
-    }
     minVec(vector: Vector3)
     {
         var vec = new Vector3(this.x(), this.y(), this.z());
@@ -249,14 +236,31 @@ class Vector3
             vec.setZ(vector.z())
         }
     }
-    tripleProduct(v2: Vector3, v3: Vector3)
-    {
-        var vec = this.cross(v2);
-        return (vec.dot(v3))
-    }
 }
-var unitVector = function ()
-{
 
-}
-export {Vector3};
+var cross = function(v1: Vector3, v2: Vector3): Vector3
+{
+    var temp = new Vector3();
+
+    temp.e[0] = v1.y() * v2.z() - v1.z() * v2.y();
+    temp.e[1] = v1.z() * v2.x() - v1.x() * v2.z();
+    temp.e[2] = v1.x() * v2.y() - v1.y() * v2.x();
+    return (temp)
+};
+
+var dot = function(v1: Vector3, v2: Vector3): number
+{
+    return((v1.x() * v2.x()) + (v1.y() * v2.y()) + (v1.z() * v2.z()))
+};
+
+var tripleProduct = function(v1: Vector3, v2: Vector3, v3: Vector3)
+{
+    return(dot((cross(v1, v2)), v3))
+};
+
+var unitVector = function (v: Vector3)
+{
+    var length = v.length();
+    return(v.div(length))
+};
+export {Vector3, cross, dot, tripleProduct, unitVector};
