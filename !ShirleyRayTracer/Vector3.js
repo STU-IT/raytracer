@@ -200,5 +200,21 @@ var unitVector = function (v) {
     var length = v.length();
     return (v.div(length));
 };
+//kan ikke finde Vector2 andre steder
+//test class | |
+//           V V
+var Vector2 = (function () {
+    function Vector2(_u, _v) {
+        this._u = _u;
+        this._v = _v;
+    }
+    Vector2.prototype.u = function () {
+        return (this._u);
+    };
+    Vector2.prototype.v = function () {
+        return (this._v);
+    };
+    return Vector2;
+}());
 //export {Vector3, cross, dot, tripleProduct, unitVector}; 
 //# sourceMappingURL=Vector3.js.map

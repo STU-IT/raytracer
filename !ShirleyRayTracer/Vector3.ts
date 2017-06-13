@@ -263,4 +263,26 @@ var unitVector = function (v: Vector3)
     var length = v.length();
     return(v.div(length))
 };
+
+//kan ikke finde Vector2 andre steder
+//test class | |
+//           V V
+class Vector2
+{
+    _u: number;
+    _v: number;
+    constructor(_u: number, _v: number)
+    {
+        this._u = _u;
+        this._v = _v;
+    }
+    u()
+    {
+        return(this._u)
+    }
+    v()
+    {
+        return(this._v)
+    }
+}
 //export {Vector3, cross, dot, tripleProduct, unitVector};
