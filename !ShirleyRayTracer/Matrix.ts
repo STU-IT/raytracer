@@ -208,3 +208,59 @@ var rotateZ = function (angle: number)
     return(ret)
 };
 
+var rotate = function (axis: Vector3, angle)
+{
+    var _axis = unitVector(axis);
+    var ret = new Matrix();
+    var x = _axis.x();
+    var y = _axis.y();
+    var z = _axis.z();
+    var cosine = Math.cos(angle);
+    var sine = Math.sin(angle);
+    var t = 1 - cosine;
+
+    ret.x[0][0] = t * x * x + cosine;
+    ret.x[0][1] = t * x * y - sine * y;
+    ret.x[0][2] = t * x * z + sine * y;
+    ret.x[0][3] = 0;
+
+    ret.x[1][0] = t * x * y + sine * z;
+    ret.x[1][1] = t * y * y + cosine;
+    ret.x[1][2] = t * y * z - sine * x;
+    ret.x[1][3] = 0;
+
+    ret.x[2][0] = t * x * z - sine * y;
+    ret.x[2][1] = t * y * z + sine * x;
+    ret.x[2][2] = t * z * z + cosine;
+    ret.x[2][3] = 0;
+
+    ret.x[3][0] = 0;
+    ret.x[3][1] = 0;
+    ret.x[3][2] = 0;
+    ret.x[3][3] = 1;
+
+    return(ret)
+};
+
+var scale = function (_x: number, _y: number, _z: number)
+{
+    var ret = zeroMatrix();
+
+    ret.x[0][0] = _x;
+    ret.x[1][1] = _y;
+    ret.x[2][2] = _z;
+    ret.x[3][3] = 1;
+
+    return(ret)
+};
+
+var viewMatrix = function (eye: Vector3, gaze: Vector3, up: Vector3)
+{
+    var ret = identityMatrix();
+
+    var w = unitVector(gaze).nik();
+    var u = unitVector(cross(up, w));
+    var v = cross(w, u);
+};
+
+//side 135
