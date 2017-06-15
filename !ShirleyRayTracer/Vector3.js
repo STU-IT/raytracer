@@ -208,10 +208,10 @@ var Vector2 = (function () {
         this._u = _u;
         this._v = _v;
     }
-    Vector2.prototype.u = function () {
+    Vector2.prototype.x = function () {
         return (this._u);
     };
-    Vector2.prototype.v = function () {
+    Vector2.prototype.y = function () {
         return (this._v);
     };
     return Vector2;

@@ -4,7 +4,7 @@ class HitRecord
 {
     t: number;
     normal: Vector3;
-    uv: any;
+    uv: Vector2;
     hit_p: Vector3;
     hit_tex: any;
     color: RGB;

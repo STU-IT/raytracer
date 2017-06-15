@@ -276,11 +276,11 @@ class Vector2
         this._u = _u;
         this._v = _v;
     }
-    u()
+    x()
     {
         return(this._u)
     }
-    v()
+    y()
     {
         return(this._v)
     }
