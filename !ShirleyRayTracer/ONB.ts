@@ -4,11 +4,16 @@ class ONB
     V: Vector3;
     W: Vector3;
 
+    constructor()
     constructor(a: Vector3, b: Vector3, c: Vector3)
+    constructor(a?: Vector3, b?: Vector3, c?: Vector3)
     {
-        this.U = a;
-        this.V = b;
-        this.W = c;
+        if (a != null)
+        {
+            this.U = a;
+            this.V = b;
+            this.W = c;
+        }
     }
 
     set(a: Vector3, b: Vector3, c: Vector3)

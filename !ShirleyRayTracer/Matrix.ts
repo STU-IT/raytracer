@@ -4,7 +4,17 @@ class Matrix
 
     constructor()
     {
-        this.x = [[]];
+        this.x = [];
+        for(var i = 0; i < 4; i++)
+        {
+            //this.x[i].push(0);
+            var tempA = [];
+            for(var j = 0; j < 4; j++)
+            {
+                tempA[j] = 0;
+            }
+            this.x.push(tempA);
+        }
     }
 
     plusE(right_op: Matrix)
@@ -92,22 +102,107 @@ class Matrix
         return(inverse)
     }
 
-    transpose()
+    getTranspose() : Matrix
     {
+        var res = new Matrix();
         for(var i = 0; i < 4; i++)
         {
             for(var j = 0; j < 4; j++)
             {
-                var temp = this.x[i][j];
-                this.x[i][j] = this.x[j][i];
-                this.x[j][i] = temp;
+                res.x[j][i] = this.x[i][j];
+                res.x[i][j] = this.x[j][i];
             }
         }
+        return(res);
     }
 
     determinant()
     {
-        return(0)
+        var det;
+
+        det  = this.x[0][0] * det3(this.x[1][1], this.x[1][2], this.x[1][3], this.x[2][1], this.x[2][2], this.x[2][3], this.x[3][1], this.x[3][2], this.x[3][3]);
+        det -= this.x[0][1] * det3(this.x[1][0], this.x[1][2], this.x[1][3], this.x[2][0], this.x[2][2], this.x[2][3], this.x[3][0], this.x[3][2], this.x[3][3]);
+        det += this.x[0][2] * det3(this.x[1][0], this.x[1][1], this.x[1][3], this.x[2][0], this.x[2][1], this.x[2][3], this.x[3][0], this.x[3][1], this.x[3][3]);
+        det -= this.x[0][3] * det3(this.x[1][0], this.x[1][1], this.x[1][2], this.x[2][0], this.x[2][1], this.x[2][2], this.x[3][0], this.x[3][1], this.x[3][2]);
+
+        return(det)
+    }
+
+    plus(right_op: Matrix)
+    {
+        var ret = new Matrix();
+
+        for(var i = 0; i < 4; i++)
+        {
+            for(var j = 0; j < 4; j++)
+            {
+                ret.x[i][j] = this.x[i][j] + right_op.x[i][j];
+            }
+        }
+        return(ret)
+    }
+
+    minus(right_op: Matrix)
+    {
+        var ret = new Matrix();
+
+        for(var i = 0; i < 4; i++)
+        {
+            for(var j = 0; j < 4; j++)
+            {
+                ret.x[i][j] = this.x[i][j] - right_op.x[i][j];
+            }
+        }
+        return(ret)
+    }
+
+    multi(right_op: number): Matrix
+    multi(right_op: Matrix): Matrix
+    multi(right_op: Vector3) : Vector3
+    multi(right_op) : any
+    {
+        var ret = new Matrix();
+
+        if (typeof(right_op) == "number")
+        {
+            for (var i = 0; i < 4; i++)
+            {
+                for (var j = 0; j < 4; j++)
+                {
+                    ret.x[i][j] = this.x[i][j] * right_op;
+                }
+            }
+            return (ret)
+        }
+        else if(right_op.x != null)
+        {
+            for (var i = 0; i < 4; i++)
+            {
+                for (var j = 0; j < 4; j++)
+                {
+                    var subt = 0;
+                    for(var k = 0; k < 4; k++)
+                    {
+                        subt += this.x[i][k] * right_op.x[k][j];
+                        ret.x[i][j] = subt;
+                    }
+                }
+            }
+            return (ret)
+        }
+        else
+        {
+            var v = new Vector3();
+            var temp;
+
+            v[0] = right_op[0] * this.x[0][0] + right_op[1] * this.x[0][1] + right_op[2] * this.x[0][2] + this.x[0][3];
+            v[1] = right_op[0] * this.x[1][0] + right_op[1] * this.x[1][1] + right_op[2] * this.x[1][2] + this.x[1][3];
+            v[2] = right_op[0] * this.x[2][0] + right_op[1] * this.x[2][1] + right_op[2] * this.x[2][2] + this.x[2][3];
+            temp = right_op[0] * this.x[3][0] + right_op[1] * this.x[3][1] + right_op[2] * this.x[3][2] + this.x[3][3];
+
+            var rV = v.div(temp);
+            return(rV)
+        }
     }
 }
 
@@ -261,6 +356,29 @@ var viewMatrix = function (eye: Vector3, gaze: Vector3, up: Vector3)
     var w = unitVector(gaze).nik();
     var u = unitVector(cross(up, w));
     var v = cross(w, u);
+
+    ret.x[0][0] = u.x();
+    ret.x[0][1] = u.y();
+    ret.x[0][2] = u.z();
+    ret.x[1][0] = v.x();
+    ret.x[1][1] = v.y();
+    ret.x[1][2] = v.z();
+    ret.x[2][0] = w.x();
+    ret.x[2][1] = w.y();
+    ret.x[2][2] = w.z();
+
+    var move = identityMatrix();
+    move.x[0][3] = -(eye.x());
+    move.x[1][3] = -(eye.y());
+    move.x[2][3] = -(eye.z());
+
+    ret = ret.multi(move);
+    return(ret)
+};
+
+var transformLoc = function (left_op: Matrix, right_op: Vector3)
+{
+    return(left_op.multi(right_op))
 };
 
 //side 135

@@ -1,8 +1,10 @@
 var ONB = (function () {
     function ONB(a, b, c) {
-        this.U = a;
-        this.V = b;
-        this.W = c;
+        if (a != null) {
+            this.U = a;
+            this.V = b;
+            this.W = c;
+        }
     }
     ONB.prototype.set = function (a, b, c) {
         this.U = a;

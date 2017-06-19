@@ -8,6 +8,7 @@ class HitRecord
     hit_p: Vector3;
     hit_tex: any;
     color: RGB;
+    uvw: ONB;
     constructor()
     {
         this.t = 0;
@@ -16,16 +17,21 @@ class HitRecord
         this.hit_p = new Vector3();
         this.hit_tex;
         this.color = new RGB();
+        this.uvw;
     }
 }
 
-class Shape
+abstract class Shape
 {
     hit(r: Ray, tmin: number, tmax: number, time: number, record: HitRecord)
     {
 
     }
 
+    shadowHit(r: Ray, tmin: number, tmax: number, time: number)
+    {
 
+    }
 }
+
 //export {Shape, HitRecord}
