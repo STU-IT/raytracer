@@ -48,7 +48,7 @@ class Parallelogram extends Shape
 
         this.pdf = 1 / this.area;
     }
-    hit(r: Ray, tmin: number, tmax: number, time: number, rec: HitRecord)
+    hit(r: Ray, tmin: number, tmax: number, time: number, rec: SurfaceHitRecord)
     {
         var PARALLEL_EPSILDN = 0.00000001;
 
@@ -66,12 +66,35 @@ class Parallelogram extends Shape
             return(false)
         }
 
-        //hved ikke hvorfor Vector3 skal kunne tage kun 1 paremeter
-        var hit_plane = new Vector3(r.origin().plus(r.direction()).multi(t))
+        //hved ikke hvorfor Vector3 skal kun tage kun 1 paremeter
+        var hit_plane = new Vector3(r.origin().plus(r.direction()).multi(t));
         var offset = new Vector3(this.base.minus(hit_plane));
+
+        var u1 = dot(this.unorm, offset) / this.u.length();
+        if(u1 < 0 || u1 > 1)
+        {
+            return(false)
+        }
+
+        var v1 = dot(this.vnorm, offset) / this.v.length();
+        if(v1 < 0 || v1 > 1)
+        {
+            return(false)
+        }
+
+        rec.mat_ptr = this.mptr;
+        rec.p = rec.texp = hit_plane;
+        rec.t = t;
+
+        rec.uvw.initFromW(this.norm);
+
+        //this.uv er en Vector2 og Vector2 har ikke en plus function
+        rec.uv = v1 * this.uv2 + (1 - v1) * this.uv0 + u1 * this.uv1;
+        return(true)
     }
-    shadowHit()
+    shadowHit(r: Ray, tmin: number, tmax: number, time: number)
     {
+        var dot1 = dot(r.direction(), this.norm);
 
     }
 }
