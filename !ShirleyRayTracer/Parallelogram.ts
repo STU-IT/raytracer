@@ -66,7 +66,9 @@ class Parallelogram extends Shape
             return(false)
         }
 
+        //hved ikke hvorfor Vector3 skal kunne tage kun 1 paremeter
         var hit_plane = new Vector3(r.origin().plus(r.direction()).multi(t))
+        var offset = new Vector3(this.base.minus(hit_plane));
     }
     shadowHit()
     {
