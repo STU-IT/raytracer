@@ -94,8 +94,30 @@ class Parallelogram extends Shape
     }
     shadowHit(r: Ray, tmin: number, tmax: number, time: number)
     {
-        var dot1 = dot(r.direction(), this.norm);
+        var PARALLEL_EPSILDN = 0.00000001;
 
+        var dot1 = dot(r.direction(), this.norm);
+        if(dot1 < PARALLEL_EPSILDN && -PARALLEL_EPSILDN)
+        {
+            return(false)
+        }
+
+        var dot2 = dot(this.norm, this.base);
+        var t = (dot2 - dot(this.norm, r.origin())) / dot1;
+        if(t > tmax || t < tmin)
+        {
+            return(false)
+        }
+        var hit_plane = new Vector3(r.origin(), + r.direction()* t);
+        var offset = new Vector3(hit_plane - this.base);
+
+        var u1 = dot(this.unorm, offset) / this.u.length();
+        if(u1 < 0 || u1 > 1)
+        {
+            return(false)
+        }
+        var v1 = dot(this.vnorm, offset) / this.v.length();
+        return(v1 >= 0 || v1 <= 1)
     }
 }
 //side 211
