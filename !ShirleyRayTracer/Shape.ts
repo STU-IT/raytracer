@@ -20,18 +20,30 @@ class HitRecord
         this.uvw;
     }
 }
+class SurfaceHitRecord
+{
+    t: number;
+    p: Vector3;
+    texp: Vector3;
+    uvw: ONB;
+    uv: Vector2;
+    mat_ptr: Material;
+    constructor()
+    {
+        this.t;
+        this.p;
+        this.texp;
+        this.uvw;
+        this.uv;
+        this.mat_ptr;
+    }
+}
 
 abstract class Shape
 {
-    hit(r: Ray, tmin: number, tmax: number, time: number, record: HitRecord)
-    {
+    abstract hit(r: Ray, tmin: number, tmax: number, time: number, record: HitRecord): boolean
 
-    }
-
-    shadowHit(r: Ray, tmin: number, tmax: number, time: number)
-    {
-
-    }
+    abstract shadowHit(r: Ray, tmin: number, tmax: number, time: number): boolean
 }
 
 //export {Shape, HitRecord}

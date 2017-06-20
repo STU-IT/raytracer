@@ -11,13 +11,20 @@ var HitRecord = (function () {
     }
     return HitRecord;
 }());
+var SurfaceHitRecord = (function () {
+    function SurfaceHitRecord() {
+        this.t;
+        this.p;
+        this.texp;
+        this.uvw;
+        this.uv;
+        this.mat_ptr;
+    }
+    return SurfaceHitRecord;
+}());
 var Shape = (function () {
     function Shape() {
     }
-    Shape.prototype.hit = function (r, tmin, tmax, time, record) {
-    };
-    Shape.prototype.shadowHit = function (r, tmin, tmax, time) {
-    };
     return Shape;
 }());
 //export {Shape, HitRecord} 
